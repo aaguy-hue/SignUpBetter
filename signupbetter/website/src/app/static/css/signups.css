@@ -84,6 +84,12 @@
     margin: 0.7rem;
 }
 
+.create-new-signup label[required]::after {
+    color: #d00;
+    content: "*";
+    position: relative;
+}
+
 @media only screen and (max-width: 830px) {
     .slot-details-input {
         width: 90%;

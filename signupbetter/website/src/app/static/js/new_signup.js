@@ -104,7 +104,7 @@ function addEmptySlot() {
     locationInput.type = "text";
     locationInput.name = `slot${slotCount}-location`;
     locationInput.id = `slot${slotCount}-location`;
-    locationInput.placeholder = "Enter a location...";
+    locationInput.placeholder = "Enter a location (optional)";
     locationInput.className = "slot-location-input";
 
     // Create label and textarea elements for 'Details'
@@ -120,7 +120,7 @@ function addEmptySlot() {
     // detailsTextarea.rows = 5;
     detailsTextarea.maxLength = DETAILS_MAX_LENGTH;
     detailsTextarea.className = "slot-details-input";
-    detailsTextarea.placeholder = "Enter in details here...";
+    detailsTextarea.placeholder = "Enter in details here (optional)";
 
     // Create label and input elements for 'Date'
     const dateLabel = document.createElement("label");
@@ -133,29 +133,32 @@ function addEmptySlot() {
     dateInput.name = `slot${slotCount}-date`;
     dateInput.id = `slot${slotCount}-date`;
     dateInput.className = "slot-date-input";
-    dateInput.required = true;
-
+    
     // Create label and select elements for 'Day'
     const dayLabel = document.createElement("label");
     dayLabel.setAttribute("for", `slot${slotCount}-day`);
     dayLabel.className = "slot-day-label";
     dayLabel.textContent = "Day: ";
-
-    const daySelect = document.createElement("select");
-    daySelect.name = `slot${slotCount}-day`;
-    daySelect.id = `slot${slotCount}-day`;
-    daySelect.className = "slot-day-input";
-    daySelect.required = true;
-
-    const days = ["mon", "tues", "wed", "thurs", "fri", "sat", "sun"];
+    
+    const dayDropdown = document.createElement("select");
+    dayDropdown.name = `slot${slotCount}-day`;
+    dayDropdown.id = `slot${slotCount}-day`;
+    dayDropdown.className = "slot-day-input";
+    dayDropdown.required = true;
+    
     const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    days.forEach((day, index) => {
+    dayNames.forEach((day, index) => {
         const option = document.createElement("option");
         option.value = day;
-        option.textContent = dayNames[index];
-        daySelect.appendChild(option);
+        option.textContent = day;
+        dayDropdown.appendChild(option);
     });
 
+    dateInput.addEventListener('change', function() {
+        const dayOfWeek = new Date(this.value).toLocaleDateString('en-US', { weekday: 'long' });
+        dayDropdown.value = dayOfWeek;
+    });
+    
     // Create label and input elements for 'Time'
     const timeLabel = document.createElement("label");
     timeLabel.setAttribute("for", `slot${slotCount}-time`);
@@ -185,7 +188,7 @@ function addEmptySlot() {
     newSlot.appendChild(document.createElement("br"));
 
     newSlot.appendChild(dayLabel);
-    newSlot.appendChild(daySelect);
+    newSlot.appendChild(dayDropdown);
     newSlot.appendChild(document.createElement("br"));
 
     newSlot.appendChild(timeLabel);

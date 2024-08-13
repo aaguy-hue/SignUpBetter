@@ -39,12 +39,12 @@
     <form method="POST" action="{{ url_for('signups.create_new_signup') }}" class="create-new-signup">
         <div class="tab-content">
             <div class="tab-pane fade show active" id="general-info" role="tabpanel" aria-labelledby="general-info-tab">
-                <label for="signup_name">Name of the Signup: </label>
+                <label for="signup_name" required>Name of the Signup: </label>
                 <input class="form-control" type="text" name="signup_name" placeholder="Your Signup" autofocus="" id="signup_name" aria-required="true" required>
 
                 <br>
 
-                <label for="signup_type">What will this signup be used for? </label>
+                <label for="signup_type" required>What will this signup be used for? </label>
                 <div>
                     <div class="signup-type-radiobutton">
                         <div class="form-check signup-type-radiobutton-content">
