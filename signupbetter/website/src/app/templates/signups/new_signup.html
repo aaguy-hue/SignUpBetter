@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Register for SignUpBetter{% endblock %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/signups.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="centered-page">
+    <h1>New Signup</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% if "username" in messages[0] and "exist" in messages[0] %}
+                <div class="alert alert-primary">
+                    {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    {{ messages[0] }}.</a>.
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endwith %}
+
+    <ul class="nav nav-tabs" id="new_signup_tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link disabled" id="general-info-tab" data-bs-toggle="tab" data-bs-target="#general-info" type="button" role="tab" aria-controls="general-info" aria-selected="true">General Info</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link disabled" id="slots-tab" data-bs-toggle="tab" data-bs-target="#slots" type="button" role="tab" aria-controls="slots" aria-selected="false">Slots</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link disabled" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Settings</button>
+        </li>
+    </ul>
+
+    <form method="POST" action="{{ url_for('signups.create_new_signup') }}" class="create-new-signup">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="general-info" role="tabpanel" aria-labelledby="general-info-tab">
+                <label for="signup_name">Name of the Signup: </label>
+                <input class="form-control" type="text" name="signup_name" placeholder="Your Signup" autofocus="" id="signup_name" aria-required="true" required>
+
+                <br>
+
+                <label for="signup_type">What will this signup be used for? </label>
+                <div>
+                    <div class="signup-type-radiobutton">
+                        <div class="form-check signup-type-radiobutton-content">
+                            <input class="form-check-input" type="radio" name="signup_type" id="signup_type_booking" checked>
+                            <label class="form-check-label" for="signup_type_booking">
+                                Booking Appointments
+                            </label>
+                            <span data-bs-toggle="tooltip" data-bs-placement="right" title="Use this option if you want people to be able to choose a specific timeslot to do something.">
+                                <i class="bi bi-question-circle"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="signup-type-radiobutton">
+                        <div class="form-check signup-type-radiobutton-content">
+                            <input class="form-check-input" type="radio" name="signup_type" id="signup_type_projects">
+                            <label class="form-check-label" for="signup_type_projects">
+                                Projects
+                            </label>
+                            <span data-bs-toggle="tooltip" data-bs-placement="right" title="Use this option if you want people to be able to sign up for a project.">
+                                <i class="bi bi-question-circle"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-secondary signup-fake-next-button">
+                    Next
+                    <i class="bi bi-arrow-right-circle"></i>
+                </button>
+                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                    Save and Edit Later
+                </button>
+            </div>
+
+            <div class="tab-pane fade" id="slots" role="tabpanel" aria-labelledby="slots-tab">
+                <h2>Slots</h2>
+
+                <div class="slots-div"></div>
+                
+                <br />
+                
+                <button type="button" class="btn btn-secondary add-slot-btn">
+                    Add Slot
+                    <i class="bi bi-plus"></i>
+                </button>
+                
+                <br />
+                
+                <button type="button" class="btn btn-secondary signup-back-btn">
+                    Back
+                    <i class="bi bi-arrow-left-circle"></i>
+                </button>
+                <button type="button" class="btn btn-primary signup-next-btn">
+                    Next
+                    <i class="bi bi-arrow-right-circle"></i>
+                </button>
+                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                    Save and Edit Later
+                </button>
+            </div>
+
+            <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                <h2>Settings</h2>
+                
+                <input type="checkbox" name="unsignups" id="unsignups">
+                <label for="unsignups">Can people cancel after signing up?</label>
+
+                <br>
+
+                <input type="checkbox" name="cancomment" id="cancomment">
+                <label for="cancomment">Can people leave comments while signing up?</label>
+
+                <br>
+                
+                <button type="button" class="btn btn-secondary signup-back-btn">
+                    Back
+                    <i class="bi bi-arrow-left-circle"></i>
+                </button>
+                <button type="button" class="btn btn-primary signup-next-btn">
+                    Next
+                    <i class="bi bi-arrow-right-circle"></i>
+                </button>
+                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                    Save and Edit Later
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block modals %}
+    <!-- Modal to lock the signup type -->
+    <div class="modal fade" id="lockSignupType" tabindex="-1" role="dialog" aria-labelledby="promptLockSignupType" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="promptLockSignupType">Are you sure you wish to continue?</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Once you continue, you cannot change the type of signup that this is.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary signup-next-btn" data-bs-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I need to make changes!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/new_signup.js') }}"></script>
+{% endblock %}

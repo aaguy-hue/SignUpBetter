@@ -1,0 +1,19 @@
+.centered-page {
+    margin: auto;
+    width: 75%;
+    padding: 15px;
+}
+
+.login-form {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form #username, .login-form #password, .login-form #password2 {
+    margin-bottom: 15px;
+}
+
+.login-form #remember {
+    margin-bottom: 13px;
+}

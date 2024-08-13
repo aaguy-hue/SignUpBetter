@@ -1,0 +1,91 @@
+.signup-type-radiobutton {
+    display: flex;
+    align-items: center;
+}
+
+.form-check.signup-type-radiobutton-content {
+    display: flex;
+    align-items: center;
+}
+
+.signup-type-radiobutton .form-check-input {
+    margin-right: 5px; /* Adjust as needed */
+}
+
+.signup-type-radiobutton span[data-bs-toggle="tooltip"] {
+    margin-left: 2px;
+}
+
+.signup-type-radiobutton span[data-bs-toggle="tooltip"] i {
+    font-size: 1.4rem;
+}
+
+.signup-next-btn i {
+    font-size: 1rem;
+}
+
+.slot {
+    position: relative;
+    border-radius: 5%;
+    border: 0.2rem solid;
+    padding: 0.8rem;
+    margin: 0.4rem;
+}
+
+.slot-trash-icon-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+}
+
+.slot-trash-icon-button i {
+    font-size: 1rem;
+    color: #e4e4dc;
+}
+
+.slot-location-input, .slot-details-input {
+    display: block;
+    margin-bottom: 1.1rem;
+}
+
+.slot-details-input {
+    width: 70%;
+}
+
+.slot-details-label {
+    display: block;
+}
+
+.slot-date-label, .slot-date-input {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0.5rem;
+}
+
+.slot-day-label, .slot-day-input {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0.5rem;
+}
+
+.slot {
+    border-radius: 3%;
+    border: 0.2rem solid;
+    padding: 0.8rem;
+    margin: 0.4rem;
+}
+
+.add-slot-btn {
+    margin-bottom: 0.5rem;
+}
+
+#cancomment, #unsignups {
+    margin: 0.7rem;
+}
+
+@media only screen and (max-width: 830px) {
+    .slot-details-input {
+        width: 90%;
+    }
+}

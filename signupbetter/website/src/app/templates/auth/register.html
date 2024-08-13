@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Register for SignUpBetter{% endblock %}
+
+{% block content %}
+<div class="centered-page">
+    <h1>So you want to register for the website?</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% if "username" in messages[0] and "exist" in messages[0] %}
+                <div class="alert alert-primary">
+                    {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    {{ messages[0] }}.</a>.
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('auth.register') }}" class="login-form">
+        <label for="username">Username:</label>
+        <input class="form-control" type="text" name="username" placeholder="Your Username" autofocus="" id="username">
+        
+        <label for="password">Password:</label>
+        <input class="form-control" type="password" name="password" placeholder="Your Password" id="password">
+
+        <label for="password2">Type the password again:</label>
+        <input class="form-control" type="password" name="password2" placeholder="Re-Enter Your Password" id="password2">
+        
+        <button class="btn btn-success">Register</button>
+    </form>
+</div>
+{% endblock %}

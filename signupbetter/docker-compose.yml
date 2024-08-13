@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    signup-website:
+        build:
+            context: website
+        stop_signal: SIGINT
+        ports:
+            - 8000:8000
+        environment:
+            - DB_SERVER=signup-postgres
+            - DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@signup-postgres/${POSTGRES_DB}
+            - SECRET_KEY=${SITE_SECRET_KEY}
+        links:
+            - signup-postgres
+    
+    signup-postgres:
+        image: "postgres:9.6-alpine"
+        container_name: signup-postgres
+        volumes:
+            - signup-data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - LANG=en_US.utf8
+            - LC_ALL=en_US.utf8
+
+volumes:
+    signup-data:
+        driver: local
