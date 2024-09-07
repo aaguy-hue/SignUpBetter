@@ -90,6 +90,14 @@
     position: relative;
 }
 
+#signup_slot_amt_default {
+    width: 5rem;
+}
+
+label[for=signup_slot_amt_default] i {
+    font-size: 1.4rem;
+}
+
 @media only screen and (max-width: 830px) {
     .slot-details-input {
         width: 90%;

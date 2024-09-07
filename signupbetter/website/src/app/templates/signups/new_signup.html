@@ -44,6 +44,22 @@
 
                 <br>
 
+                <label for="signup_details" required>Details about the Signup: </label>
+                <textarea maxlength="200" class="form-control" type="text" name="signup_details" placeholder="Details" id="signup_details" aria-required="true" required></textarea>
+
+                <br>
+                
+                <label for="signup_slot_amt_default" required>
+                    How many people can sign up for each slot?
+                    <span data-bs-toggle="tooltip" data-bs-placement="right" title="Set this to zero if you want infinite people to be able to sign up.">
+                        <i class="bi bi-question-circle"></i>
+                    </span>
+                </label>
+                <input type="number" name="signup_slot_amt_default" id="signup_slot_amt_default" class="form-control" value="5" min="0" max="100">
+
+                <br>
+
+
                 <label for="signup_type" required>What will this signup be used for? </label>
                 <div>
                     <div class="signup-type-radiobutton">
@@ -109,13 +125,13 @@
             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <h2>Settings</h2>
                 
-                <input type="checkbox" name="unsignups" id="unsignups">
                 <label for="unsignups">Can people cancel after signing up?</label>
+                <input type="checkbox" name="can_cancel" id="can_cancel" class="form-check-input">
 
                 <br>
-
-                <input type="checkbox" name="cancomment" id="cancomment">
+                
                 <label for="cancomment">Can people leave comments while signing up?</label>
+                <input type="checkbox" name="can_comment" id="can_comment" class="form-check-input" checked>
 
                 <br>
                 
@@ -123,9 +139,8 @@
                     Back
                     <i class="bi bi-arrow-left-circle"></i>
                 </button>
-                <button type="button" class="btn btn-primary signup-next-btn">
-                    Next
-                    <i class="bi bi-arrow-right-circle"></i>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Create Signup!
                 </button>
                 <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
                     Save and Edit Later
