@@ -3,14 +3,14 @@ from enum import Enum
 class InvalidDayError(Exception):
     pass
 
-class SignUpType(Enum):
+class SignupType(Enum):
     PROJECT = 0
     SCHEDULING = 1
     
-    def fromStr(s: str) -> int:
+    def fromStr(s: str) -> 'SignupType':
         ss: str = s.strip().lower()
-        if ss == "project":
-            return SignUpType.PROJECT
+        if ss == "projects":
+            return SignupType.PROJECT
         elif ss == "scheduling":
-            return SignUpType.SCHEDULING
+            return SignupType.SCHEDULING
         raise ValueError("Invalid sign up type!")

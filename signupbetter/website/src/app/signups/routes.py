@@ -3,7 +3,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
 from app.extensions import db
 from app.signups import bp
-from app.signups.create_signup import InvalidDayError, SignUpType
+from app.signups.create_signup import InvalidDayError, SignupType
 from app.models.signups import SignupSlot, Signup
 
 @bp.route('/create-a-signup/', methods=['GET', 'POST'])
@@ -14,25 +14,23 @@ def create_new_signup():
             'signups/new_signup.html',
         )
     
-    signup_name = request.form.get('signup_name')
-    signup_details = request.form.get('signup_details')
+    signup_name: str = request.form.get('signup_name')
+    signup_details: str = request.form.get('signup_details')
     try:
-        signup_type = SignUpType.fromStr(request.form.get('signup_type'))
+        signup_type: SignupType = SignupType.fromStr(request.form.get('signup_type'))
     except ValueError:
         flash("Invalid sign up type.", "danger")
         return render_template('signups/new_signup.html')
-    can_cancel = request.form.get('can_cancel', 'false') == 'true'
-    can_comment = request.form.get('can_comment', 'false') == 'true'
+    can_cancel: bool = request.form.get('can_cancel', 'false') == 'true'
+    can_comment: bool = request.form.get('can_comment', 'false') == 'true'
     
     try:
-        # Convert signup_type to the corresponding enum value
-        signup_type_enum = SignUpType.PROJECT if signup_type == 'projects' else SignUpType.SCHEDULING
-        
+        # Convert signup_type to the corresponding enum value        
         # Create new Signup object
         new_signup = Signup(
             name=signup_name,
             details=signup_details,
-            signUpType=signup_type_enum,
+            signUpType=signup_type,
             canCancel=can_cancel,
             canComment=can_comment
         )

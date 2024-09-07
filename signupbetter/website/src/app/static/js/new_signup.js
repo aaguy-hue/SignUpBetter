@@ -98,13 +98,13 @@ function validateForm() {
                 return false;
             }
 
-            const isBooking = document.getElementById("signup_type_booking").checked;
+            const isScheduling = document.getElementById("signup_type_scheduling").checked;
 
             for (i = 0; i < slotsCollection.length; i++) {
                 const slot = slotsCollection[i];
                 
-                if (isBooking) {
-                    // Validate booking-specific fields
+                if (isScheduling) {
+                    // Validate scheduling-specific fields
                     const time = slot.querySelector(".slot-time-input");
                     const date = slot.querySelector(".slot-date-input");
                     const day = slot.querySelector(".slot-day-input");
@@ -200,7 +200,7 @@ function updateTabs(activeTab) {
 }
 
 function addEmptySlot() {
-    const isBooking = document.getElementById("signup_type_booking").checked;
+    const isScheduling = document.getElementById("signup_type_scheduling").checked;
 
     var defaultLocation = "";
     var defaultDate = "";
@@ -210,7 +210,7 @@ function addEmptySlot() {
         const lastSlot = slotsCollection[slotsCollection.length-1];
         defaultLocation = lastSlot.querySelector(".slot-location-input").value;
 
-        if (isBooking) {
+        if (isscheduling) {
             defaultDate = lastSlot.querySelector(".slot-date-input").value;
             defaultDay = lastSlot.querySelector(".slot-day-input").value;
             defaultTime = lastSlot.querySelector(".slot-time-input").value;
@@ -308,7 +308,7 @@ function addEmptySlot() {
     let dayLabel, dayDropdown;
     let timeLabel, timeInput;
     let nameLabel, nameInput;
-    if (isBooking) {
+    if (isScheduling) {
         // Create label and input elements for 'Date'
         dateLabel = document.createElement("label");
         dateLabel.setAttribute("for", `slot${slotId}-date`);
@@ -399,7 +399,7 @@ function addEmptySlot() {
     newSlot.appendChild(detailsTextarea);
     newSlot.appendChild(document.createElement("br"));
 
-    if (isBooking) {
+    if (isScheduling) {
         newSlot.appendChild(dateLabel);
         newSlot.appendChild(dateInput);
         newSlot.appendChild(document.createElement("br"));

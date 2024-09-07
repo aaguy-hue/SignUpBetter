@@ -1,7 +1,7 @@
 import datetime
 from app.extensions import db
 from app.models.auth import User
-from app.signups.create_signup import InvalidDayError, SignUpType
+from app.signups.create_signup import InvalidDayError, SignupType
 
 class SignupSlot(db.Model):
     __tablename__ = 'signup_slot'
@@ -50,20 +50,20 @@ class Signup(db.Model):
     can_comment = db.Column(db.Boolean, default=False, nullable=False) 
     slots = db.relationship('SignupSlot', backref='signup', lazy=True)
 
-    def __init__(self, name: str, details: str, signUpType: int, canCancel: bool, canComment: bool):
-        if signUpType != SignUpType.SCHEDULING and signUpType != SignUpType.PROJECT:
+    def __init__(self, name: str, details: str, signUpType: SignupType, canCancel: bool, canComment: bool):
+        if signUpType not in SignupType:
             raise ValueError("Invalid sign up type")
         
         self.name = name
         self.details = details
-        self.signUpType = signUpType
+        self.signUpType = signUpType.value
         self.canCancel = canCancel
         self.canComment = canComment
 
     def addSlot(self, slot: SignupSlot):
-        if self.signUpType == SignUpType.SCHEDULING and (slot.time is None or slot.date is None or slot.day is None):
+        if self.signUpType == SignupType.SCHEDULING and (slot.time is None or slot.date is None or slot.day is None):
             raise ValueError("No date, day, or time was passed in.")
-        elif self.signUpType == SignUpType.PROJECT and slot.name is None:
+        elif self.signUpType == SignupType.PROJECT and slot.name is None:
             raise ValueError("No name was passed in")
         
         self.slots.append(slot)

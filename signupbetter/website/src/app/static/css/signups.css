@@ -78,6 +78,7 @@
 
 .add-slot-btn {
     margin-bottom: 0.5rem;
+    width: 100%;
 }
 
 #cancomment, #unsignups {
