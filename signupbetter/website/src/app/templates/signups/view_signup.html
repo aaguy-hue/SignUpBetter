@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Register for SignUpBetter{% endblock %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/signups.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="centered-page">
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {%- for msg in errors %}
+            <li>{{ msg }}</li>
+            {% endfor -%}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    {% endwith %}
+    
+    {% with successes = get_flashed_messages(category_filter=["success"]) %}
+    {% if successes %}
+    <div class="alert alert-success">
+            <ul>
+                {%- for msg in successes %}
+                    <li>{{ msg }}</li>
+                    {% endfor -%}
+                </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <h1>{{ signup.name }}</h1>
+    <p>{{ signup.details }}</p>
+    
+</div>
+{% endblock %}
+
+{% block modals %}
+
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}

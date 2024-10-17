@@ -53,8 +53,11 @@ form.addEventListener('submit', function(event) {
         return;
     }
 
+    const edit_later = event.target.classList.contains("edit-later");
+
     const slotData = collectSlotData();
     const formData = new FormData(event.target);
+    formData.append("published", !edit_later);
     slotData.forEach(slot => {
         for (const [key, value] of Object.entries(slot)) {
             formData.append(`${slot.id}-${key}`, value);
@@ -64,6 +67,10 @@ form.addEventListener('submit', function(event) {
 
 function generateUniqueId() {
     return Math.random().toString(36).substr(2, 9);
+}
+
+function isSchedulingSelected() {
+    return document.getElementById("signup_type_scheduling").checked;
 }
 
 function getActiveTabId() {
@@ -78,7 +85,7 @@ function getActiveTabId() {
 
 function validateForm() {
     const tabId = getActiveTabId();
-    const section = sections[tabId]
+    const section = sections[tabId];
     const inputs = section.querySelectorAll('input, textarea');
     
     for (i = 0; i < inputs.length; i++) {
@@ -98,7 +105,7 @@ function validateForm() {
                 return false;
             }
 
-            const isScheduling = document.getElementById("signup_type_scheduling").checked;
+            const isScheduling = isSchedulingSelected();
 
             for (i = 0; i < slotsCollection.length; i++) {
                 const slot = slotsCollection[i];
@@ -118,9 +125,6 @@ function validateForm() {
                         date.reportValidity();
                         return false;
                     }
-                    time.setCustomValidity("");
-                    date.setCustomValidity("");
-                    day.setCustomValidity("");
                 } else {
                     const name = slot.querySelector(".slot-name");
 
@@ -152,7 +156,7 @@ fakeNextBtn.addEventListener('click', function(event) {
     // Manually trigger the modal if form is valid
     var modalElement = document.getElementById('lockSignupType');
     var modal = new bootstrap.Modal(modalElement);
-    modal.show();    
+    modal.show();
 });
 
 const nextBtns = [].slice.call(document.getElementsByClassName("signup-next-btn"));
@@ -161,6 +165,18 @@ nextBtns.forEach(function (nextBtn) {
         event.preventDefault();
         if (!validateForm()) {
             return;
+        }
+
+        const isScheduling = isSchedulingSelected();
+        if (isScheduling) {
+            document.getElementById("sorting_method").innerHTML = `
+                    <option value="preserve_order" selected>Keep current order</option>
+                    <option value="date">Group by Date</option>
+                    <option value="time">Group by Time</option>`
+        } else {
+            document.getElementById("sorting_method").innerHTML = `
+                    <option value="preserve_order" selected>Keep current order</option>
+                    <option value="alphabetical">Alphabetical Order</option>`
         }
         
         activeTab = Math.min(activeTab + 1, numTabs-1);
@@ -200,7 +216,7 @@ function updateTabs(activeTab) {
 }
 
 function addEmptySlot() {
-    const isScheduling = document.getElementById("signup_type_scheduling").checked;
+    const isScheduling = isSchedulingSelected();
 
     var defaultLocation = "";
     var defaultDate = "";
@@ -210,7 +226,7 @@ function addEmptySlot() {
         const lastSlot = slotsCollection[slotsCollection.length-1];
         defaultLocation = lastSlot.querySelector(".slot-location-input").value;
 
-        if (isscheduling) {
+        if (isScheduling) {
             defaultDate = lastSlot.querySelector(".slot-date-input").value;
             defaultDay = lastSlot.querySelector(".slot-day-input").value;
             defaultTime = lastSlot.querySelector(".slot-time-input").value;

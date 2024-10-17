@@ -10,20 +10,32 @@
 <div class="centered-page">
     <h1>New Signup</h1>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% if "username" in messages[0] and "exist" in messages[0] %}
-                <div class="alert alert-primary">
-                    {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
-                </div>
-            {% else %}
-                <div class="alert alert-danger">
-                    {{ messages[0] }}.</a>.
-                </div>
-            {% endif %}
-        {% endif %}
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {%- for msg in errors %}
+                    <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
     {% endwith %}
 
+    {% with successes = get_flashed_messages(category_filter=["success"]) %}
+    {% if successes %}
+        <div class="alert alert-success">
+            <ul>
+                {%- for msg in errors %}
+                    <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    {% endwith %}
+    
     <ul class="nav nav-tabs" id="new_signup_tabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link disabled" id="general-info-tab" data-bs-toggle="tab" data-bs-target="#general-info" type="button" role="tab" aria-controls="general-info" aria-selected="true">General Info</button>
@@ -90,7 +102,7 @@
                     Next
                     <i class="bi bi-arrow-right-circle"></i>
                 </button>
-                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                <button type="button" class="btn btn-warning edit-later">
                     Save and Edit Later
                 </button>
             </div>
@@ -109,7 +121,7 @@
                 
                 <br />
                 
-                <button type="button" class="btn btn-secondary signup-back-btn">
+                <button type="button" class="btn btn-secondary signup-back-btn disabled" disabled>
                     Back
                     <i class="bi bi-arrow-left-circle"></i>
                 </button>
@@ -117,7 +129,7 @@
                     Next
                     <i class="bi bi-arrow-right-circle"></i>
                 </button>
-                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                <button type="button" class="btn btn-warning edit-later">
                     Save and Edit Later
                 </button>
             </div>
@@ -130,8 +142,18 @@
 
                 <br>
                 
-                <label for="cancomment">Can people leave comments while signing up?</label>
-                <input type="checkbox" name="can_comment" id="can_comment" class="form-check-input" checked>
+                <label for="commenting_status">Comments</label>
+                <select name="commenting_status" id="commenting_status" class="form-select" aria-label="Commenting status">
+                    <option value="required">Required</option>
+                    <option selected value="optional">Optional</option>
+                    <option value="disabled">Disabled</option>
+                </select>
+                <br>
+
+                <label for="sorting_method">How would you like for the slots to be sorted?</label>
+                <select name="sorting_method" id="sorting_method" class="form-select">
+                    <!-- OPTIONS POPULATED USING JS -->
+                </select>
 
                 <br>
                 
@@ -142,7 +164,7 @@
                 <button type="submit" class="btn btn-primary btn-lg">
                     Create Signup!
                 </button>
-                <button type="button" class="btn btn-warning signup-save-and-edit-later-btn">
+                <button type="submit" class="btn btn-warning edit-later">
                     Save and Edit Later
                 </button>
             </div>
