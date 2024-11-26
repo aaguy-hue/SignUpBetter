@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="centered-page">
+<div class="wrapper">
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
     <div class="alert alert-danger">

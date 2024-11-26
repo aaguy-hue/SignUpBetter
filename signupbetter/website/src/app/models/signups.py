@@ -1,4 +1,7 @@
 import datetime
+from typing import List
+
+from sqlalchemy.orm import Mapped, mapped_column
 from app.extensions import db
 from app.models.auth import User
 from app.signups.create_signup import InvalidDayError, SignupType, SignupSortingMethod, CommentingStatus
@@ -6,17 +9,18 @@ from app.signups.create_signup import InvalidDayError, SignupType, SignupSorting
 class SignupSlot(db.Model):
     __tablename__ = 'signup_slot'
     
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    location = db.Column(db.String(50))
-    details = db.Column(db.String(200))
-    time = db.Column(db.Time)  # For storing time in HH:MM:SS format
-    date = db.Column(db.Date)  # For storing date in YYYY-MM-DD format
-    day = db.Column(db.String(10))
-    signUpLimit = db.Column(db.SmallInteger())
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(db.String(50))
+    location: Mapped[str] = mapped_column(db.String(50))
+    details: Mapped[str] = mapped_column(db.String(200))
+    time: Mapped[datetime.time] = mapped_column()  # Stored in HH:MM:SS format
+    date: Mapped[datetime.date] = mapped_column()  # Stored in YYYY-MM-DD format
+    day: Mapped[str] = mapped_column(db.String(10))
+    signUpLimit: Mapped[int] = mapped_column(db.SmallInteger())
     
-    users = db.relationship('User', secondary='signup_slot_user', backref='slots', lazy=True)
-    signup_id = db.Column(db.Integer, db.ForeignKey('signup.id'), nullable=False)
+    signup_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('signup.id'))
+    signup: Mapped['Signup'] = db.relationship(back_populates='slots')
+    users: Mapped[List['User']] = db.relationship(secondary='signup_slot_user', back_populates='signed_up_slots')
     
     def __init__(self, name: str, signUpLimit: int, details: str, location: str, time: datetime.time, date: datetime.date, day: str):                
         self.name = name
@@ -33,7 +37,6 @@ class SignupSlot(db.Model):
         self.users.append(user)
         db.session.commit()
 
-# Many to one relationship between SignUpSlot and User
 signup_slot_user = db.Table('signup_slot_user',
     db.Column('signup_slot_id', db.Integer, db.ForeignKey('signup_slot.id'), primary_key=True),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -43,18 +46,20 @@ signup_slot_user = db.Table('signup_slot_user',
 class Signup(db.Model):
     __tablename__ = 'signup'
     
-    id = db.Column(db.Integer, primary_key=True)
-    signUpType = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    details = db.Column(db.String(200))
-    can_cancel = db.Column(db.Boolean, default=False, nullable=False) 
-    commenting_status = db.Column(db.SmallInteger(), nullable=False) 
-    published = db.Column(db.Boolean, default=False, nullable=False)
-    sorting_method = db.Column(db.SmallInteger(), nullable=False)
-    
-    slots = db.relationship('SignupSlot', backref='signup', lazy=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    signUpType: Mapped[int]
+    name: Mapped[str] = mapped_column(db.String(50))
+    details: Mapped[str] = mapped_column(db.String(200))
+    can_cancel: Mapped[bool] = mapped_column(default=False) 
+    commenting_status: Mapped[int] = mapped_column(db.SmallInteger())
+    published: Mapped[bool] = mapped_column(default=False)
+    sorting_method: Mapped[int] = mapped_column(db.SmallInteger())
 
-    def __init__(self, name: str, details: str, signUpType: SignupType, canCancel: bool, commenting_status: CommentingStatus, published: bool, sorting_method: SignupSortingMethod):
+    owner_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('user.id'))
+    owner: Mapped['User'] = db.relationship(back_populates='signups')
+    slots: Mapped[List['SignupSlot']] = db.relationship(back_populates='signup')
+
+    def __init__(self, owner: User, name: str, details: str, signUpType: SignupType, canCancel: bool, commenting_status: CommentingStatus, published: bool, sorting_method: SignupSortingMethod):
         if signUpType not in SignupType:
             raise ValueError("Invalid sign up type")
         if sorting_method not in SignupSortingMethod:
@@ -62,6 +67,7 @@ class Signup(db.Model):
         if commenting_status not in CommentingStatus:
             raise ValueError("Invalid option for comments")
         
+        self.owner = owner
         self.name = name
         self.details = details
         self.signUpType = signUpType.value
