@@ -91,6 +91,10 @@ function validateForm() {
     for (i = 0; i < inputs.length; i++) {
         const input = inputs[i];
 
+        if (!input.hasAttribute('required') && !input.value.trim()) {
+            continue;
+        }
+
         if (!input.checkValidity()) {
             input.reportValidity();
             return false;

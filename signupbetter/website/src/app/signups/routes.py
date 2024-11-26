@@ -1,6 +1,6 @@
 import datetime
 from flask import render_template, redirect, request, url_for, flash
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_required
 from app.extensions import db
 from app.signups import bp
 from app.signups.create_signup import InvalidDayError, SignupType, CommentingStatus, SignupSortingMethod
@@ -36,6 +36,7 @@ def create_new_signup():
     
     try:
         new_signup = Signup(
+            owner=current_user,
             name=signup_name,
             details=signup_details,
             signUpType=signup_type,
